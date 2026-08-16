@@ -11,7 +11,7 @@ def test_telegram_application_builds_without_network_access(tmp_path) -> None:
     database = Database(tmp_path / "bot.sqlite3")
     database.initialize()
     settings = Settings(
-        telegram_bot_token="123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijk",
+        telegram_bot_token="123456789:" + ("A" * 35),
         database_path=tmp_path / "bot.sqlite3",
         market_data_provider="mock",
         market_cache_seconds=300,

@@ -1,12 +1,13 @@
 # AI Portfolio Intelligence - Master Project Plan
 
-Status: planning baseline
-Research checked: August 14, 2026
+Status: planning baseline; Phase 1 implemented
+Research checked: August 15, 2026
 Working title only; choose a product name later.
 
-> Implementation update, August 14, 2026: the active pilot is Telegram-only. The responsive
+> Implementation update, August 15, 2026: the active pilot is Telegram-only. The responsive
 > web application is deferred until the Telegram workflow proves that users repeatedly value
-> the brief, risk alerts, and ticker reviews. See `README.md` for the running MVP.
+> the brief, risk alerts, and ticker reviews. See
+> [`phases/phase-01-telegram-agent`](../phases/phase-01-telegram-agent/) for the running MVP.
 
 ## 1. The product in one sentence
 
@@ -603,7 +604,9 @@ These personal-finance features should not be mixed into the stock MVP.
 
 ## 22. Immediate next action
 
-Give the coding agent `CODING_AGENT_BRIEF.md`. Instruct it to complete Milestone 0 and Milestone 1 only. Review the working dashboard and calculation tests before authorizing live data, Bedrock, brokerage connections, or recommendation logic.
+Use `CODING_AGENT_BRIEF.md` when the web application phase begins. For the current pilot,
+run `phases/phase-01-telegram-agent`, test it for one market week, and review engagement before
+authorizing live data, Bedrock, brokerage connections, or recommendation logic.
 
 ## 23. Research sources
 

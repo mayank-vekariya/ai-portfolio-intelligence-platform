@@ -35,3 +35,14 @@ def test_delete_user_cascades_portfolio_data(tmp_path) -> None:
     assert database.list_holdings(1) == []
     assert database.list_watchlist(1) == []
     assert database.get_cash(1) == Decimal("0")
+
+
+def test_database_releases_file_handles(tmp_path) -> None:
+    database_path = tmp_path / "handles.sqlite3"
+    database = Database(database_path)
+    database.initialize()
+    database.register_user(1, 1, "One", "UTC", "07:30")
+
+    database_path.unlink()
+
+    assert not database_path.exists()

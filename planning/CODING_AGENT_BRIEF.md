@@ -1,9 +1,10 @@
 # Coding Agent Brief - Start Here
 
 > Status update: this original web-first brief is retained for the later web milestone. The
-> active implementation is now the Telegram-only pilot documented in `README.md`.
+> active implementation is now the Telegram-only pilot documented in
+> [`phases/phase-01-telegram-agent`](../phases/phase-01-telegram-agent/).
 
-Use `PROJECT_PLAN.md` as the product source of truth.
+Use [`PROJECT_PLAN.md`](PROJECT_PLAN.md) as the product source of truth.
 
 ## Your role
 

@@ -1,127 +1,89 @@
 # AI Portfolio Intelligence Platform
 
-An evidence-backed, cross-broker portfolio intelligence platform. The complete product strategy,
-architecture, security model, brokerage roadmap, AI workflow, and delivery milestones are in
-[`PROJECT_PLAN.md`](PROJECT_PLAN.md).
+[![CI](https://github.com/mayank-vekariya/ai-portfolio-intelligence-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/mayank-vekariya/ai-portfolio-intelligence-platform/actions/workflows/ci.yml)
+[![Project site](https://img.shields.io/badge/project_site-live-b8ff70?labelColor=101813)](https://mayank-vekariya.github.io/ai-portfolio-intelligence-platform/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-d6e8ff?labelColor=101813)](https://www.python.org/)
+[![MIT License](https://img.shields.io/badge/license-MIT-f4d38a?labelColor=101813)](LICENSE)
 
-The first working interface is a Telegram-only private beta for manually tracking a stock
-portfolio, receiving a daily summary, reviewing concentration and material moves, and inspecting
-technical context for a ticker. Telegram is the validation wedge, not the final product boundary;
-the roadmap expands into licensed market intelligence, connected portfolios, a responsive web
-application, and—only after regulatory review—carefully bounded advice or execution workflows.
+[![AI Portfolio Intelligence project preview](docs/assets/og-card.png)](https://mayank-vekariya.github.io/ai-portfolio-intelligence-platform/)
 
-The bot cannot connect to a brokerage or place an order. It uses neutral review language rather than personalized buy/sell instructions.
+An evidence-backed, cross-broker portfolio intelligence project built in deliberate phases.
+The first working phase is a private Telegram agent that tracks a manually entered portfolio,
+produces daily briefs, highlights risk, and explains technical context without placing trades.
 
-## What works
+**[View the project showcase](https://mayank-vekariya.github.io/ai-portfolio-intelligence-platform/)** ·
+**[Run the Telegram phase](phases/phase-01-telegram-agent/README.md)** ·
+**[Read the master plan](planning/PROJECT_PLAN.md)**
 
-- Private-chat-only Telegram commands.
-- Optional allowlist for five beta users.
-- Manual holdings, weighted average cost, tracked cash, and watchlist.
-- Current portfolio value, daily move, gain/loss, and position weights.
-- Concentration, large-move, drawdown-from-cost, and incomplete-data alerts.
-- On-demand ticker analysis with trend, momentum, volatility, drawdown, and RSI context.
-- Scheduled per-user daily briefs with IANA timezones.
-- SQLite tenant isolation keyed by the authenticated Telegram user ID.
-- User-controlled data deletion.
-- Deterministic offline demo and test fixtures.
-- Docker deployment using long polling.
+> This is an educational decision-support prototype, not an investment adviser or brokerage.
+> No code in Phase 1 can place an order.
 
-## Important prototype limitation
+## Project phases
 
-The default `yahoo` adapter calls an unofficial public chart endpoint and is included only to make a private technical prototype useful. Its availability, accuracy, delay, terms, and redistribution rights are not guaranteed.
+| Phase | Folder | Status | Outcome |
+| --- | --- | --- | --- |
+| 1 | [`phase-01-telegram-agent`](phases/phase-01-telegram-agent/) | Working MVP | Private Telegram briefs, portfolio summaries, risk review, and ticker analysis |
+| 2 | [`phase-02-web-application`](phases/phase-02-web-application/) | Planned | Responsive portfolio dashboard and evidence-backed decision cards |
+| 3 | [`phase-03-connected-portfolios`](phases/phase-03-connected-portfolios/) | Planned | Approved read-only brokerage connections and multi-account views |
+| 4 | [`phase-04-financial-planning`](phases/phase-04-financial-planning/) | Future | Income, expenses, emergency savings, retirement, and goal-based planning |
 
-Before inviting public or paying users, implement a licensed commercial `MarketDataProvider`, preserve provider timestamps and entitlements, and remove the prototype adapter from production.
+The current build stays intentionally narrow. It proves that a small group of users repeatedly
+values a daily brief and risk-first alerts before the project invests in broker connections,
+licensed market data, AWS infrastructure, or a full application.
 
-## Run the offline demo
+## What Phase 1 already does
 
-The demo does not need Telegram or network access.
+- Keeps each Telegram user's portfolio isolated by authenticated Telegram user ID.
+- Tracks holdings, weighted average cost, cash, and a watchlist.
+- Calculates portfolio value, gain/loss, daily movement, concentration, and drawdown alerts.
+- Produces scheduled daily briefs in each user's timezone.
+- Explains trend, momentum, volatility, drawdown, and RSI for a requested ticker.
+- Offers an offline deterministic demo and an automated test suite.
+- Runs locally or in Docker using Telegram long polling.
+- Supports complete user-data deletion with `/delete_me CONFIRM`.
+
+## Quick demonstration
 
 ```powershell
+Set-Location .\phases\phase-01-telegram-agent
 python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -e ".[dev]"
-portfolio-bot-demo
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\portfolio-bot-demo.exe
 ```
 
-## Create and run the Telegram bot
+The demo is offline: it uses deterministic fixture prices and does not require a Telegram token,
+brokerage login, or network connection.
 
-1. Open Telegram and message the official `@BotFather` account.
-2. Run `/newbot`, choose a name and a username ending in `bot`, and copy the token.
-3. Copy `.env.example` to `.env`.
-4. Put the token in `TELEGRAM_BOT_TOKEN`.
-5. For a private beta, add comma-separated numeric Telegram user IDs to `ALLOWED_TELEGRAM_USER_IDS`.
-6. Run:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-portfolio-telegram-bot
-```
-
-The token is an account credential. Never paste it into source code, commit it, include it in a screenshot, or send it in a Telegram chat.
-
-## First Telegram session
+## Repository map
 
 ```text
-/start
-/id
-/add AAPL 10 185.50
-/add MSFT 4 410
-/cash 2000
-/watch NVDA
-/portfolio
-/risk
-/brief
-/analyze NVDA
-/daily 07:30 America/Los_Angeles
+phases/                  Independently documented product phases
+  phase-01-telegram-agent/  Working Python Telegram MVP and tests
+  phase-02-web-application/ Future responsive application boundary
+  phase-03-connected-portfolios/ Read-only integration boundary
+  phase-04-financial-planning/ Long-term financial-planning boundary
+planning/                Product strategy and coding-agent brief
+docs/                    Public GitHub Pages showcase
+.github/workflows/       Credential-free CI
+ROADMAP.md               Delivery status and next gates
+DEPLOYMENT.md            Website and bot deployment guide
 ```
 
-`/add` combines a new lot with an existing holding using a weighted average. Use `/set` to replace the entire tracked position.
+## Product principle
 
-## Docker
+Research the market once, then perform lightweight deterministic checks for each affected
+portfolio. An explanatory model may summarize verified evidence, but it never performs
+authoritative portfolio math and never receives a trading tool.
 
-After creating `.env`:
+## Documentation
 
-```powershell
-docker compose up --build -d
-docker compose logs -f portfolio-bot
-```
+- [Current roadmap and progress](ROADMAP.md)
+- [Deployment guide](DEPLOYMENT.md)
+- [Master product and architecture plan](planning/PROJECT_PLAN.md)
+- [Coding-agent handoff brief](planning/CODING_AGENT_BRIEF.md)
+- [Security policy](SECURITY.md)
+- [Contribution guide](CONTRIBUTING.md)
 
-The SQLite database is stored in the local `data` directory. Back it up before upgrading or moving the service.
+## License
 
-## Tests and quality checks
-
-```powershell
-pytest
-ruff check .
-```
-
-## Security behavior
-
-- The bot refuses portfolio operations in groups.
-- The optional user allowlist limits the private beta.
-- Tenant authority comes from Telegram's authenticated `effective_user.id`, never message text.
-- Monetary values use `Decimal` and are stored as decimal strings.
-- The bot does not accept account credentials or account numbers.
-- `/delete_me CONFIRM` removes the user's stored portfolio data.
-- No order-placement code exists.
-
-## Deployment choice
-
-This MVP uses Telegram long polling because it is the smallest reliable deployment for five users. Run one bot process in Docker on an always-on host. Do not run multiple polling replicas for the same token.
-
-For a later AWS production version, move to Telegram webhooks with API Gateway/Lambda, use Telegram's webhook secret header, replace SQLite with PostgreSQL or DynamoDB, and trigger daily briefs through EventBridge Scheduler.
-
-## Next milestone
-
-1. Test the bot for one market week with manual portfolios.
-2. Measure whether users open and act on the brief.
-3. Add a licensed data adapter and SEC filing/event ingestion.
-4. Add a structured investment-policy questionnaire.
-5. Add evidence links and material-change suppression.
-6. Complete legal review before charging for personalized securities recommendations.
-
-Official references:
-
-- [Telegram Bot tutorial](https://core.telegram.org/bots/tutorial)
-- [Telegram Bot API](https://core.telegram.org/bots/api)
-- [python-telegram-bot](https://python-telegram-bot.org/)
+Released under the [MIT License](LICENSE).
